@@ -26,7 +26,7 @@
 }(function (root) {
     'use strict';
 
-    var self, _ = root._, Backbone = root.Backbone, Globalize = root.Globalize;
+    var _ = root._, Backbone = root.Backbone, Globalize = root.Globalize;
 
     ////////////////////
 
@@ -40,11 +40,9 @@
 
         ////////////////////
 
-        self = _.extend(this, {
-            model: model
-        }, {
-            attributes: {}
-        });
+        this.model = model;
+        this.attributes = {};
+        model.schema = this;
 
         ////////////////////
 
@@ -74,7 +72,7 @@
 
                 ////////////////////
 
-                var options = self.attributes[attribute],
+                var options = this.schema.attributes[attribute],
                     getter = options && options.getter;
 
                 ////////////////////
@@ -107,7 +105,7 @@
 
                     ////////////////////
 
-                    var options = self.attributes[attribute],
+                    var options = this.schema.attributes[attribute],
                         setter = options && options.setter;
 
                     ////////////////////
@@ -119,7 +117,7 @@
                     _.each(result, function (value, key) {
                         values[key] = value;
                     });
-                });
+                }, this);
 
                 return fn.call(this, values, options);
             })
@@ -472,7 +470,7 @@
                         ////////////////////
 
                         if (_.isUndefined(value)) {
-                            value = self.defaultValue(attribute);
+                            value = this.defaultValue(attribute);
                         }
 
                         ////////////////////
