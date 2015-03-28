@@ -13,7 +13,7 @@
 
         ////////////////////
 
-        module.exports = jsdom.jsdom(html).parentWindow;
+        module.exports = jsdom.jsdom(html).defaultView;
 
     } else {
         $(window.__html__[FIXTURE_FILEPATH]).children().appendTo(document.body);
