@@ -1,8 +1,8 @@
 [npm-badge]: https://badge.fury.io/js/backbone.schema.png
 [npm-link]: https://badge.fury.io/js/backbone.schema
 
-[travis-badge]: https://secure.travis-ci.org/DreamTheater/Backbone.Schema.png
-[travis-link]: https://travis-ci.org/DreamTheater/Backbone.Schema
+[travis-badge]: https://secure.travis-ci.org/dnemoga/Backbone.Schema.png
+[travis-link]: https://travis-ci.org/dnemoga/Backbone.Schema
 
 [gemnasium-badge]: https://gemnasium.com/DreamTheater/Backbone.Schema.png
 [gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.Schema
@@ -306,5 +306,5 @@ The plugin prevents setting `undefined` values, instead of this it assigns a def
   - Initial release
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/DreamTheater/backbone.schema/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dnemoga/backbone.schema/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

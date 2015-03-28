@@ -2,7 +2,7 @@
  * Backbone.Schema v0.4.9
  * https://github.com/DreamTheater/Backbone.Schema
  *
- * Copyright (c) 2014 Dmytro Nemoga
+ * Copyright (c) 2015 Dmytro Nemoga
  * Released under the MIT license
  */
 /*jshint maxstatements:15, maxcomplexity:9, maxlen:104 */
@@ -121,9 +121,7 @@
                     });
                 });
 
-                fn.call(this, values, options);
-
-                return this;
+                return fn.call(this, values, options);
             })
         });
     };
