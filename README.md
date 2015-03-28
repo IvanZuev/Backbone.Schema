@@ -219,6 +219,10 @@ model.get('reference-collection'); // <-- instance of Backbone.Collection
 The plugin prevents setting `undefined` values, instead of this it assigns a default value or `null` for regular properties, `{}` for models and `[]` for collections and arrays.
 
 ## Changelog
+### 0.4.10
+  - Fixed issue with nested models and collections
+  - Removed Globlize as hard dependency. 
+  
 ### 0.4.9
   - Fixed issue with nested models and collections
 
