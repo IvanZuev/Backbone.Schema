@@ -197,8 +197,10 @@
 
                     ////////////////////
 
-                    if (!_.isDate(value)) {
+                    if(format) {
                         value = Globalize.parseDate(value, format, culture) || new Date(value);
+                    } else {
+                        value = new Date(value);
                     }
 
                     ////////////////////

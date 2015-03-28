@@ -76,6 +76,7 @@
                     'boolean-property': true,
                     'number-property': 999999.99,
                     'datetime-property': '2012-12-12T00:00:00.000Z',
+                    'datetime-without-format-property': '2013-12-12T00:00:00.000Z',
                     'locale-property': 'HELLO_WORLD',
 
                     'array-of-strings': ['string'],
@@ -106,6 +107,7 @@
                     'boolean-property': { type: 'boolean' },
                     'number-property': { type: 'number' },
                     'datetime-property': { type: 'datetime', format: 'd', standard: 'iso' },
+                    'datetime-without-format-property': { type: 'datetime', standard: 'iso'},
                     'locale-property': { type: 'locale' }
                 });
 
@@ -134,6 +136,7 @@
                     'boolean-property',
                     'number-property',
                     'datetime-property',
+                    'datetime-without-format-property',
                     'locale-property',
 
                     'array-of-strings',
@@ -157,6 +160,7 @@
                 expect(model.attributes['boolean-property']).to.equal(true);
                 expect(model.attributes['number-property']).to.equal(999999.99);
                 expect(model.attributes['datetime-property']).to.equal('2012-12-12T00:00:00.000Z');
+                expect(model.attributes['datetime-without-format-property']).to.equal('2013-12-12T00:00:00.000Z');
                 expect(model.attributes['locale-property']).to.equal('HELLO_WORLD');
 
                 expect(model.attributes['array-of-strings']).to.deep.equal(['string']);
@@ -190,6 +194,7 @@
                     'boolean-property': true,
                     'number-property': 999999.99,
                     'datetime-property': '2012-12-12T00:00:00.000Z',
+                    'datetime-without-format-property': '2013-12-12T00:00:00.000Z',
                     'locale-property': 'HELLO_WORLD',
 
                     'array-of-strings': ['string'],
@@ -242,6 +247,14 @@
                 var datetimeProperty = model.get('datetime-property');
 
                 expect(datetimeProperty).to.equal('12/12/2012');
+            });
+        });
+
+        describe('#model.get("datetime-without-format-property")', function () {
+            it('should return value as is', function () {
+                var datetimeProperty = model.get('datetime-without-format-property');
+
+                expect(datetimeProperty.getTime()).to.equal(new Date('2013-12-12T00:00:00.000Z').getTime());
             });
         });
 
@@ -481,6 +494,48 @@
 
                 model.set(attribute, '12/12/2012');
                 expect(model.attributes[attribute]).to.equal(date.toISOString());
+
+                model.set(attribute, '');
+                expect(model.attributes[attribute]).to.equal('Invalid Date');
+
+                model.set(attribute, 999999.99);
+                expect(model.attributes[attribute]).to.equal('1970-01-01T00:16:39.999Z');
+
+                model.set(attribute, 0);
+                expect(model.attributes[attribute]).to.equal('1970-01-01T00:00:00.000Z');
+
+                model.set(attribute, true);
+                expect(model.attributes[attribute]).to.equal('1970-01-01T00:00:00.001Z');
+
+                model.set(attribute, false);
+                expect(model.attributes[attribute]).to.equal('1970-01-01T00:00:00.000Z');
+
+                model.set(attribute, date);
+                expect(model.attributes[attribute]).to.equal(date.toISOString());
+
+                model.set(attribute, array);
+                expect(model.attributes[attribute]).to.equal('Invalid Date');
+
+                model.set(attribute, object);
+                expect(model.attributes[attribute]).to.equal('Invalid Date');
+
+                model.set(attribute, null);
+                expect(model.attributes[attribute]).to.be.null;
+
+                model.set(attribute, undefined);
+                expect(model.attributes[attribute]).to.be.null;
+
+                model.unset(attribute);
+                expect(model.attributes).to.not.have.property(attribute);
+            });
+        });
+
+        describe('#model.set("datetime-without-format-property")', function () {
+            it('should convert value to instance of date', function () {
+                var attribute = 'datetime-without-format-property', date = new Date('12/12/2012'), array = [], object = {};
+
+                model.set(attribute, '2013-12-12T00:00:00Z');
+                expect(model.attributes[attribute]).to.equal('2013-12-12T00:00:00.000Z');
 
                 model.set(attribute, '');
                 expect(model.attributes[attribute]).to.equal('Invalid Date');

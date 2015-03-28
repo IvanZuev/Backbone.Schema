@@ -19,7 +19,11 @@ This plugin allow you define schemas for your models. It provides type control, 
 
   - [Backbone](https://github.com/documentcloud/backbone) `>= 1.1.0`
   - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.2`
+
+For date/number formatting:
   - [Globalize](https://github.com/jquery/globalize) `>= 0.1.1`
+
+Globalize is not a hard dependency, it is only needed if you wish to use date and numbers formatting, or localization features.
 
 ## Getting Started
 ### Create model and schema
