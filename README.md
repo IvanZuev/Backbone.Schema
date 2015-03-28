@@ -4,8 +4,8 @@
 [travis-badge]: https://secure.travis-ci.org/dnemoga/Backbone.Schema.png
 [travis-link]: https://travis-ci.org/dnemoga/Backbone.Schema
 
-[gemnasium-badge]: https://gemnasium.com/DreamTheater/Backbone.Schema.png
-[gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.Schema
+[gemnasium-badge]: https://gemnasium.com/dnemoga/Backbone.Schema.svg
+[gemnasium-link]: https://gemnasium.com/dnemoga/Backbone.Schema
 
 # Backbone.Schema
 
