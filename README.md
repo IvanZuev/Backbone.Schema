@@ -1,7 +1,7 @@
-[npm-badge]: https://badge.fury.io/js/backbone.schema.png
+[npm-badge]: https://badge.fury.io/js/backbone.schema.svg
 [npm-link]: https://badge.fury.io/js/backbone.schema
 
-[travis-badge]: https://secure.travis-ci.org/dnemoga/Backbone.Schema.png
+[travis-badge]: https://travis-ci.org/dnemoga/Backbone.Schema.svg
 [travis-link]: https://travis-ci.org/dnemoga/Backbone.Schema
 
 [gemnasium-badge]: https://gemnasium.com/dnemoga/Backbone.Schema.svg
