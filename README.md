@@ -215,6 +215,51 @@ model.set('reference-collection', [ // --> new Backbone.Collection([
 model.get('reference-collection'); // <-- instance of Backbone.Collection
 ```
 
+#### Option `toJSON`
+  Backbone.Schema allows you to choose between several alternatives for the JSON representation of an attribute.
+
+  Possible values:
+  - true (default) - the default Backbone behavior. The value will be the same value that is kept in the model.attributes array. In Backbone.Scheme context this is value after a setter method have set the value.
+  - 'getter' - JSON will be the value that is returned from a getter function, either an explicit getter, or an implicit getter of a Backbone.Scheme type.
+  - function - a function of the form `function(attribute, value, options)` will return the JSON representation.
+  - false - The attribute will not appear in the JSON representation.
+
+  Examples:
+  ```js
+    schema.define({
+        'json-getter': { type: 'datetime', format: 'd', toJSON: 'getter' },
+        'json-function': { type: 'string', toJSON: function(attribute, value, options){
+            return value.toLowerCase();
+        } },
+        'json-false': {type: 'string', toJSON: false},
+
+        'json-getter-array': { array: 'datetime', format: 'd', toJSON: 'getter' },
+        'json-function-array': { array: 'string', toJSON: function(attribute, value, options){
+            return value.toLowerCase();
+        } },
+        'json-false-array': { array: 'string', toJSON: false}
+    })
+
+    model.set({
+      'json-getter': '12/12/2012',
+      'json-function': 'Hello World',
+      'json-false': 'Should not be in json',
+
+      'json-getter-array': ['12/12/2012', '11/11/2011'],
+      'json-function-array': ['Hello', 'World'],
+      'json-false-array': ['should', 'not', 'be', 'in', 'json']
+    })
+
+    model.toJSON() // returns:
+      'json-getter': '12/12/2012',
+      'json-function': 'hello world',
+
+      'json-getter-array': ['12/12/2012', '11/11/2011'],
+      'json-function-array': ['hello', 'world']
+    {
+
+    }
+  ```
 ### Keeping integrity
 The plugin prevents setting `undefined` values, instead of this it assigns a default value or `null` for regular properties, `{}` for models and `[]` for collections and arrays.
 
