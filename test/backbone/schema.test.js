@@ -182,8 +182,11 @@
                     { id: 3, value: 'qux' }
                 ]);
 
-                expect(model.attributes['typeless-property']).to.be.null;
             });
+
+            it('should not create an attribute for an attribute that did not exists before defining the schema', function(){
+                expect(model.attributes['typeless-property']).to.be.undefined;
+            })
         });
 
         describe('#model.toJSON()', function () {
@@ -211,8 +214,6 @@
 
                     'reference-model': 0,
                     'reference-collection': [1, 2, 3],
-
-                    'typeless-property': null
                 });
             });
         });
@@ -347,9 +348,10 @@
 
         describe('#model.get("typeless-property")', function () {
             it('should return value as is', function () {
+                model.set('typeless-property', 'true')
                 var typelessProperty = model.get('typeless-property');
 
-                expect(typelessProperty).to.be.null;
+                expect(typelessProperty).to.equal('true');
             });
         });
 

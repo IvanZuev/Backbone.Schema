@@ -387,7 +387,9 @@
             var attributes = this.attributes, values = {};
 
             _.each(attributes, function (options, attribute) {
-                values[attribute] = this.model.attributes[attribute];
+                if(!_.isUndefined(this.model.attributes[attribute])){
+                    values[attribute] = this.model.attributes[attribute];
+                }
             }, this);
 
             ////////////////////
