@@ -46,6 +46,70 @@
                 { id: 2, value: 'baz' },
                 { id: 3, value: 'qux' }
             ]);
+
+            var Model = Backbone.Model.extend({
+                initialize: function () {
+                    schema = new Backbone.Schema(this);
+
+                    schema.define({
+                        'string-property': { type: 'string' },
+                        'boolean-property': { type: 'boolean' },
+                        'number-property': { type: 'number' },
+                        'datetime-property': { type: 'datetime', format: 'd', standard: 'iso' },
+                        'datetime-without-format-property': { type: 'datetime', standard: 'iso'},
+                        'locale-property': { type: 'locale' }
+                    });
+
+                    schema.define({
+                        'array-of-strings': { array: 'string' },
+                        'array-of-booleans': { array: 'boolean' },
+                        'array-of-numbers': { array: 'number' },
+                        'array-of-datetimes': { array: 'datetime', format: 'd', standard: 'iso' },
+                        'array-of-locales': { array: 'locale' }
+                    });
+
+                    schema.define({
+                        'nested-model': { model: Backbone.Model, clear: true },
+                        'nested-collection': { collection: Backbone.Collection }
+                    });
+
+                    schema.define({
+                        'reference-model': { type: 'model', source: sourceCollection, clear: true },
+                        'reference-collection': { type: 'collection', source: sourceCollection }
+                    });
+
+                    schema.define('typeless-property');
+                }
+            });
+
+            ////////////////////
+
+            model = new Model({
+                'string-property': 'string',
+                'boolean-property': true,
+                'number-property': 999999.99,
+                'datetime-property': '2012-12-12T00:00:00.000Z',
+                'datetime-without-format-property': '2013-12-12T00:00:00.000Z',
+                'locale-property': 'HELLO_WORLD',
+
+                'array-of-strings': ['string'],
+                'array-of-booleans': [true],
+                'array-of-numbers': [999999.99],
+                'array-of-datetimes': ['2012-12-12T00:00:00.000Z'],
+                'array-of-locales': ['HELLO_WORLD'],
+
+                'nested-model': { id: 0, value: 'foo' },
+                'nested-collection': [
+                    { id: 1, value: 'bar' },
+                    { id: 2, value: 'baz' },
+                    { id: 3, value: 'qux' }
+                ],
+
+                'reference-model': 0,
+                'reference-collection': [1, 2, 3]
+            });
+
+
         });
 
         // afterEach(function () {
@@ -60,77 +124,12 @@
 
         describe('#constructor(model)', function () {
             it('should initialize the schema', function () {
-
-                ////////////////////
-
-                var Model = Backbone.Model.extend({
-                    initialize: function () {
-                        schema = new Backbone.Schema(this);
-                    }
-                });
-
-                ////////////////////
-
-                model = new Model({
-                    'string-property': 'string',
-                    'boolean-property': true,
-                    'number-property': 999999.99,
-                    'datetime-property': '2012-12-12T00:00:00.000Z',
-                    'datetime-without-format-property': '2013-12-12T00:00:00.000Z',
-                    'locale-property': 'HELLO_WORLD',
-
-                    'array-of-strings': ['string'],
-                    'array-of-booleans': [true],
-                    'array-of-numbers': [999999.99],
-                    'array-of-datetimes': ['2012-12-12T00:00:00.000Z'],
-                    'array-of-locales': ['HELLO_WORLD'],
-
-                    'nested-model': { id: 0, value: 'foo' },
-                    'nested-collection': [
-                        { id: 1, value: 'bar' },
-                        { id: 2, value: 'baz' },
-                        { id: 3, value: 'qux' }
-                    ],
-
-                    'reference-model': 0,
-                    'reference-collection': [1, 2, 3]
-                });
-
                 expect(schema).to.be.an.instanceOf(Backbone.Schema);
             });
         });
 
         describe('#define(attribute, options)', function () {
             it('should define attributes of the schema', function () {
-                schema.define({
-                    'string-property': { type: 'string' },
-                    'boolean-property': { type: 'boolean' },
-                    'number-property': { type: 'number' },
-                    'datetime-property': { type: 'datetime', format: 'd', standard: 'iso' },
-                    'datetime-without-format-property': { type: 'datetime', standard: 'iso'},
-                    'locale-property': { type: 'locale' }
-                });
-
-                schema.define({
-                    'array-of-strings': { array: 'string' },
-                    'array-of-booleans': { array: 'boolean' },
-                    'array-of-numbers': { array: 'number' },
-                    'array-of-datetimes': { array: 'datetime', format: 'd', standard: 'iso' },
-                    'array-of-locales': { array: 'locale' }
-                });
-
-                schema.define({
-                    'nested-model': { model: Backbone.Model, clear: true },
-                    'nested-collection': { collection: Backbone.Collection }
-                });
-
-                schema.define({
-                    'reference-model': { type: 'model', source: sourceCollection, clear: true },
-                    'reference-collection': { type: 'collection', source: sourceCollection }
-                });
-
-                schema.define('typeless-property');
-
                 expect(schema.attributes).to.have.keys([
                     'string-property',
                     'boolean-property',
