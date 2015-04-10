@@ -1,25 +1,18 @@
-/*jshint maxstatements:15, maxcomplexity:9, maxlen:104 */
 (function (factory) {
     'use strict';
 
-    var isNode = typeof module === 'object' && typeof exports === 'object';
+    if (typeof module === 'object' && typeof exports === 'object') {
+        exports.Schema = factory(require('underscore'), require('backbone'), require('globalize'));
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define(['underscore', 'backbone', 'globalize'], factory);
+    }
+    else {
+        window.Backbone.Schema = factory(window._, window.Backbone, window.Globalize);
+    }
 
-    ////////////////////
-
-    var root = isNode ? {
-        _: require('underscore'),
-        Backbone: require('backbone'),
-        Globalize: require('globalize')
-    } : window;
-
-    ////////////////////
-
-    (isNode ? exports : Backbone).Schema = factory(root, isNode);
-
-}(function (root) {
+}(function (_, Backbone, Globalize) {
     'use strict';
-
-    var _ = root._, Backbone = root.Backbone, Globalize = root.Globalize;
 
     ////////////////////
 
