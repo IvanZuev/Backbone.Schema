@@ -46,6 +46,104 @@
                 { id: 2, value: 'baz' },
                 { id: 3, value: 'qux' }
             ]);
+
+            var Model = Backbone.Model.extend({
+                initialize: function () {
+                    schema = new Backbone.Schema(this);
+
+                    schema.define({
+                        'string-property': { type: 'string' },
+                        'boolean-property': { type: 'boolean' },
+                        'number-property': { type: 'number' },
+                        'datetime-property': { type: 'datetime', format: 'd', standard: 'iso' },
+                        'datetime-without-format-property': { type: 'datetime', standard: 'iso'},
+                        'locale-property': { type: 'locale' }
+                    });
+
+                    schema.define({
+                        'array-of-strings': { array: 'string' },
+                        'array-of-booleans': { array: 'boolean' },
+                        'array-of-numbers': { array: 'number' },
+                        'array-of-datetimes': { array: 'datetime', format: 'd', standard: 'iso' },
+                        'array-of-locales': { array: 'locale' }
+                    });
+
+                    schema.define({
+                        'nested-model': { model: Backbone.Model, clear: true },
+                        'nested-collection': { collection: Backbone.Collection }
+                    });
+
+                    schema.define({
+                        'reference-model': { type: 'model', source: sourceCollection, clear: true },
+                        'reference-collection': { type: 'collection', source: sourceCollection }
+                    });
+
+                    schema.define({
+                        'getter-setter-property': { 
+                            getter: function(attribute, value){
+                                return value.toUpperCase();
+                            },
+                            setter: function(attribute, value){
+                                return {
+                                    'getter-setter-property': value ? value.toLowerCase() : null
+                                };
+                            }
+                    }});
+
+                    schema.define('typeless-property');
+
+                    schema.define({
+                        'json-getter': { type: 'datetime', format: 'd', toJSON: 'getter' },
+                        'json-function': { type: 'string', toJSON: function(attribute, value){
+                            return value.toLowerCase();
+                        } },
+                        'json-false': {type: 'string', toJSON: false},
+
+                        'json-getter-array': { array: 'datetime', format: 'd', toJSON: 'getter' },
+                        'json-function-array': { array: 'string', toJSON: function(attribute, value){
+                            return value.toLowerCase();
+                        } },
+                        'json-false-array': { array: 'string', toJSON: false}
+                    })
+                }
+            });
+
+            ////////////////////
+
+            model = new Model({
+                'string-property': 'string',
+                'boolean-property': true,
+                'number-property': 999999.99,
+                'datetime-property': '2012-12-12T00:00:00.000Z',
+                'datetime-without-format-property': '2013-12-12T00:00:00.000Z',
+                'locale-property': 'HELLO_WORLD',
+
+                'array-of-strings': ['string'],
+                'array-of-booleans': [true],
+                'array-of-numbers': [999999.99],
+                'array-of-datetimes': ['2012-12-12T00:00:00.000Z'],
+                'array-of-locales': ['HELLO_WORLD'],
+
+                'nested-model': { id: 0, value: 'foo' },
+                'nested-collection': [
+                    { id: 1, value: 'bar' },
+                    { id: 2, value: 'baz' },
+                    { id: 3, value: 'qux' }
+                ],
+
+                'reference-model': 0,
+                'reference-collection': [1, 2, 3],
+
+                'getter-setter-property': "Word",
+
+                'json-getter': '12/12/2012',
+                'json-function': 'Hello World',
+                'json-false': 'Should not be in json',
+
+                'json-getter-array': ['12/12/2012', '11/11/2011'],
+                'json-function-array': ['Hello', 'World'],
+                'json-false-array': ['should', 'not', 'be', 'in', 'json']
+            });
         });
 
         // afterEach(function () {
@@ -60,77 +158,12 @@
 
         describe('#constructor(model)', function () {
             it('should initialize the schema', function () {
-
-                ////////////////////
-
-                var Model = Backbone.Model.extend({
-                    initialize: function () {
-                        schema = new Backbone.Schema(this);
-                    }
-                });
-
-                ////////////////////
-
-                model = new Model({
-                    'string-property': 'string',
-                    'boolean-property': true,
-                    'number-property': 999999.99,
-                    'datetime-property': '2012-12-12T00:00:00.000Z',
-                    'datetime-without-format-property': '2013-12-12T00:00:00.000Z',
-                    'locale-property': 'HELLO_WORLD',
-
-                    'array-of-strings': ['string'],
-                    'array-of-booleans': [true],
-                    'array-of-numbers': [999999.99],
-                    'array-of-datetimes': ['2012-12-12T00:00:00.000Z'],
-                    'array-of-locales': ['HELLO_WORLD'],
-
-                    'nested-model': { id: 0, value: 'foo' },
-                    'nested-collection': [
-                        { id: 1, value: 'bar' },
-                        { id: 2, value: 'baz' },
-                        { id: 3, value: 'qux' }
-                    ],
-
-                    'reference-model': 0,
-                    'reference-collection': [1, 2, 3]
-                });
-
                 expect(schema).to.be.an.instanceOf(Backbone.Schema);
             });
         });
 
         describe('#define(attribute, options)', function () {
             it('should define attributes of the schema', function () {
-                schema.define({
-                    'string-property': { type: 'string' },
-                    'boolean-property': { type: 'boolean' },
-                    'number-property': { type: 'number' },
-                    'datetime-property': { type: 'datetime', format: 'd', standard: 'iso' },
-                    'datetime-without-format-property': { type: 'datetime', standard: 'iso'},
-                    'locale-property': { type: 'locale' }
-                });
-
-                schema.define({
-                    'array-of-strings': { array: 'string' },
-                    'array-of-booleans': { array: 'boolean' },
-                    'array-of-numbers': { array: 'number' },
-                    'array-of-datetimes': { array: 'datetime', format: 'd', standard: 'iso' },
-                    'array-of-locales': { array: 'locale' }
-                });
-
-                schema.define({
-                    'nested-model': { model: Backbone.Model, clear: true },
-                    'nested-collection': { collection: Backbone.Collection }
-                });
-
-                schema.define({
-                    'reference-model': { type: 'model', source: sourceCollection, clear: true },
-                    'reference-collection': { type: 'collection', source: sourceCollection }
-                });
-
-                schema.define('typeless-property');
-
                 expect(schema.attributes).to.have.keys([
                     'string-property',
                     'boolean-property',
@@ -151,7 +184,17 @@
                     'reference-model',
                     'reference-collection',
 
-                    'typeless-property'
+                    'getter-setter-property',
+
+                    'typeless-property',
+
+                    'json-getter',
+                    'json-function',
+                    'json-false',
+
+                    'json-getter-array',
+                    'json-function-array',
+                    'json-false-array'
                 ]);
             });
 
@@ -183,8 +226,12 @@
                     { id: 3, value: 'qux' }
                 ]);
 
-                expect(model.attributes['typeless-property']).to.be.null;
+                expect(model.attributes['getter-setter-property']).to.equal('word');
             });
+
+            it('should not create an attribute for an attribute that did not exists before defining the schema', function(){
+                expect(model.attributes['typeless-property']).to.be.undefined;
+            })
         });
 
         describe('#model.toJSON()', function () {
@@ -213,7 +260,13 @@
                     'reference-model': 0,
                     'reference-collection': [1, 2, 3],
 
-                    'typeless-property': null
+                    'getter-setter-property': 'word',
+
+                    'json-getter': '12/12/2012',
+                    'json-function': 'hello world',
+
+                    'json-getter-array': ['12/12/2012', '11/11/2011'],
+                    'json-function-array': ['hello', 'world']
                 });
             });
         });
@@ -346,11 +399,20 @@
             });
         });
 
+        describe('#model.get("getter-setter-property")', function () {
+            it('should return the value as is', function () {
+                var typelessProperty = model.get('getter-setter-property');
+
+                expect(typelessProperty).to.equal('WORD');
+            });
+        });
+
         describe('#model.get("typeless-property")', function () {
             it('should return value as is', function () {
+                model.set('typeless-property', 'true')
                 var typelessProperty = model.get('typeless-property');
 
-                expect(typelessProperty).to.be.null;
+                expect(typelessProperty).to.equal('true');
             });
         });
 
@@ -1057,6 +1119,18 @@
 
                 model.set(attribute, undefined);
                 expect(model.attributes[attribute]).to.be.null;
+
+                model.unset(attribute);
+                expect(model.attributes).to.not.have.property(attribute);
+            });
+        });
+    
+        describe('#model.set("getter-setter-property")', function () {
+            it('should run setter function', function () {
+                var attribute = 'getter-setter-property';
+
+                model.set(attribute, 'String');
+                expect(model.attributes[attribute]).to.equal('string');
 
                 model.unset(attribute);
                 expect(model.attributes).to.not.have.property(attribute);

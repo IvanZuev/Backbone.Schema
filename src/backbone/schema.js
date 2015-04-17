@@ -34,16 +34,20 @@
 
         _.extend(model, {
             toJSON: _.wrap(model.toJSON, function (fn, options) {
-                var attributes = fn.call(this, options);
+                var attributes = fn.call(this, options), toJSON;
 
                 _.each(attributes, function (value, attribute, attributes) {
 
                     ////////////////////
 
-                    if (value instanceof Backbone.Model) {
-                        value = value.source ? value.id : value.toJSON(options);
-                    } else if (value instanceof Backbone.Collection) {
-                        value = value.source ? _.pluck(value.models, 'id') : value.toJSON(options);
+                    toJSON = model.schema.attributes[attribute].toJSON;
+                    toJSON = _.isUndefined(toJSON) ? true : toJSON;
+
+                    if (toJSON === false){
+                        delete attributes[attribute];   
+                        return;
+                    } else if (_.isFunction(toJSON)){
+                        value = toJSON(attribute, value, options);
                     }
 
                     ////////////////////
@@ -288,6 +292,10 @@
                     model.source = source || null;
 
                     return model;
+                },
+
+                toJSON: function(attribute, value, options) {
+                    return value.source ? value.id : value.toJSON(options);
                 }
             },
 
@@ -335,6 +343,10 @@
                     collection.source = source || null;
 
                     return collection;
+                },
+
+                toJSON: function(attribute, value, options) {
+                    return value.source ? _.pluck(value.models, 'id') : value.toJSON(options);
                 }
             }
         }
@@ -344,7 +356,6 @@
         constructor: Schema
     }, {
         define: function (attribute, options) {
-
             ////////////////////
 
             var attributes;
@@ -380,7 +391,9 @@
             var attributes = this.attributes, values = {};
 
             _.each(attributes, function (options, attribute) {
-                values[attribute] = this.model.attributes[attribute];
+                if(!_.isUndefined(this.model.attributes[attribute])){
+                    values[attribute] = this.model.attributes[attribute];
+                }
             }, this);
 
             ////////////////////
@@ -402,11 +415,10 @@
         },
 
         _addAttribute: function (attribute, options) {
-
             ////////////////////
 
-            var type = options.type, array = options.array,
-                model = options.model, collection = options.collection;
+            var type = options.type, array = options.array, isArray = !_.isUndefined(array),
+                model = options.model, collection = options.collection, constructor = this.constructor;
 
             if (!type) {
                 if (array) {
@@ -420,20 +432,38 @@
 
             ////////////////////
 
-            var constructor = this.constructor;
-
-            ////////////////////
-
             var handlers = constructor.handlers[type],
 
                 getter = handlers && handlers.getter,
-                setter = handlers && handlers.setter;
+                setter = handlers && handlers.setter,
+                toJSON = (handlers && handlers.toJSON) || options.toJSON;
 
             ////////////////////
 
             this.attributes[attribute] = _.defaults(options, {
-                getter: _.wrap(getter, function (fn, attribute, value) {
-                    var results = [], values = array ? value : [value];
+                getter: this._transformGetterToHandleArrays(getter, type, isArray, options),
+                setter: this._transformSetterToHandleArrays(setter, type, isArray, options),
+            });
+                        
+
+            if(!_.isUndefined(toJSON)){
+                if(_.isFunction(toJSON)){
+                    toJSON = this._transformToJsonToHandleArrays(toJSON, isArray);
+                } else if(toJSON === 'getter'){
+                    toJSON = this.attributes[attribute].getter;
+                }
+
+                this.attributes[attribute].toJSON = toJSON;
+            }
+
+            this._bindHandlers(options);
+
+            return this;
+        },
+
+        _transformGetterToHandleArrays: function(getter, type, isArray, options) {
+            return _.wrap(getter, function (fn, attribute, value) {
+                    var results = [], values = isArray ? value : [value];
 
                     _.each(values, function (value) {
                         var result;
@@ -447,11 +477,13 @@
                         results.push(result);
                     }, this);
 
-                    return array ? results : results[0];
-                }),
+                    return isArray ? results : results[0];
+                });
+        },
 
-                setter: _.wrap(setter, function (fn, attribute, value) {
-                    var results = [], values = array ? value : [value];
+        _transformSetterToHandleArrays: function(setter, type, isArray, options) {
+            return _.wrap(setter, function (fn, attribute, value) {
+                    var results = [], values = isArray ? value : [value];
 
                     _.each(values, function (value) {
 
@@ -484,13 +516,23 @@
                         results.push(result);
                     }, this);
 
-                    return _.object([attribute], [array ? results : results[0]]);
-                })
-            });
+                    return _.object([attribute], [isArray ? results : results[0]]);
+                });
+        },
 
-            this._bindHandlers(options);
-
-            return this;
+        _transformToJsonToHandleArrays: function(toJSON, isArray){
+            return _.wrap(toJSON, function(fn, attribute, value, options){
+                    var values;
+                    if(isArray){
+                        values = value;
+                        return _(values).map(function(value){
+                            return fn.call(this, attribute, value, options);
+                        });
+                    } else {
+                        return fn.call(this, attribute, value, options);
+                    }
+                }
+            );
         },
 
         _bindHandlers: function (options) {
