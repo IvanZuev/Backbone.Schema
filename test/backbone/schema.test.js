@@ -142,7 +142,9 @@
 
                 'json-getter-array': ['12/12/2012', '11/11/2011'],
                 'json-function-array': ['Hello', 'World'],
-                'json-false-array': ['should', 'not', 'be', 'in', 'json']
+                'json-false-array': ['should', 'not', 'be', 'in', 'json'],
+
+                'not-schemed-property': 'not in schema'
             });
         });
 
@@ -266,7 +268,8 @@
                     'json-function': 'hello world',
 
                     'json-getter-array': ['12/12/2012', '11/11/2011'],
-                    'json-function-array': ['hello', 'world']
+                    'json-function-array': ['hello', 'world'],
+                    'not-schemed-property': 'not in schema'
                 });
             });
         });
