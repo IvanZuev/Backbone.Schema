@@ -6,15 +6,13 @@ module.exports = function (config) {
 
         files: [
             // Assertion Libraries
-            'lib/chai/chai.js',
-            'lib/sinon/sinon.js',
-            'lib/sinon/sinon.chai.js',
+            'bower_components/chai/chai.js',
 
             // Libraries
-            'lib/jquery/jquery.js',
-            'lib/underscore/underscore.js',
-            'lib/backbone/backbone.js',
-            'lib/globalize/globalize.js',
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/underscore/underscore.js',
+            'bower_components/backbone/backbone.js',
+            'bower_components/globalize/lib/globalize.js',
 
             // Sources
             'src/backbone/schema.js',

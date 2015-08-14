@@ -15,10 +15,7 @@
     'use strict';
 
     var _ = root._, Backbone = root.Backbone, Globalize = root.Globalize,
-
         chai = root.chai,
-        sinon = root.sinon,
-
         expect = chai.expect;
 
     ////////////////////

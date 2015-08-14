@@ -5,15 +5,14 @@ module.exports = (function () {
         Backbone = require('backbone'),
         Globalize = require('globalize'),
 
-        chai = require('chai').use(require('sinon-chai')),
-        sinon = require('sinon');
+        chai = require('chai');
 
     ////////////////////
 
     global.window = require('./window.js');
 
     _.extend(Backbone, require('../index.js'), {
-        $: require('../lib/jquery/jquery.js')(window)
+        $: require('../bower_components/jquery/dist/jquery.js')(window)
     });
 
     ////////////////////
@@ -22,8 +21,6 @@ module.exports = (function () {
         _: _,
         Backbone: Backbone,
         Globalize: Globalize,
-
-        chai: chai,
-        sinon: sinon
+        chai: chai
     };
 }());

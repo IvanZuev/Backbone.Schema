@@ -32,5 +32,11 @@
   "dependencies": {
     "backbone": "1.0.0 - 1.1.2",
     "underscore": "1.4.4 - 1.6.0"
+  },
+  "devDependencies": {
+    "chai": "~3.2.0",
+    "mocha": "~2.0.0",
+    "globalize": "~0.1.0",
+    "jquery": "~2.1.0"
   }
 }
