@@ -1,5 +1,5 @@
 /**
- * Backbone.Schema v1.0.0
+ * Backbone.Schema v1.0.1
  * https://github.com/DreamTheater/Backbone.Schema
  *
  * Copyright (c) 2015 Dmytro Nemoga
@@ -46,15 +46,18 @@
                 _.each(attributes, function (value, attribute, attributes) {
 
                     ////////////////////
+                    
+                    if(model.schema.attributes[attribute]){
 
-                    toJSON = model.schema.attributes[attribute].toJSON;
-                    toJSON = _.isUndefined(toJSON) ? true : toJSON;
+                        toJSON = model.schema.attributes[attribute].toJSON;
+                        toJSON = _.isUndefined(toJSON) ? true : toJSON;
 
-                    if (toJSON === false){
-                        delete attributes[attribute];   
-                        return;
-                    } else if (_.isFunction(toJSON)){
-                        value = toJSON(attribute, value, options);
+                        if (toJSON === false){
+                            delete attributes[attribute];   
+                            return;
+                        } else if (_.isFunction(toJSON)){
+                            value = toJSON(attribute, value, options);
+                        }
                     }
 
                     ////////////////////
