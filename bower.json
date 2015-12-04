@@ -1,7 +1,7 @@
 {
   "name": "Backbone.Schema",
   "main": "dist/backbone.schema.min.js",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "homepage": "https://github.com/dnemoga/Backbone.Schema",
   "authors": [
     "Dmytro Nemoga <Dmytro.Nemoga@gmail.com>"

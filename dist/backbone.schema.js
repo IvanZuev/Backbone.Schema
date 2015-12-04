@@ -1,5 +1,5 @@
 /**
- * Backbone.Schema v1.0.1
+ * Backbone.Schema v1.0.2
  * https://github.com/DreamTheater/Backbone.Schema
  *
  * Copyright (c) 2015 Dmytro Nemoga
