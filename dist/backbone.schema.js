@@ -446,7 +446,7 @@
 
                 getter = handlers && handlers.getter,
                 setter = handlers && handlers.setter,
-                toJSON = (handlers && handlers.toJSON) || options.toJSON;
+                toJSON = _.isUndefined(options.toJSON) ? (handlers && handlers.toJSON): options.toJSON;
 
             ////////////////////
 
