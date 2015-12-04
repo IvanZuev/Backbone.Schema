@@ -100,7 +100,8 @@
                         'json-function-array': { array: 'string', toJSON: function(attribute, value){
                             return value.toLowerCase();
                         } },
-                        'json-false-array': { array: 'string', toJSON: false}
+                        'json-false-array': { array: 'string', toJSON: false},
+                        'json-false-collection': { collection: Backbone.Collection, toJSON: false }
                     })
                 }
             });
@@ -140,6 +141,11 @@
                 'json-getter-array': ['12/12/2012', '11/11/2011'],
                 'json-function-array': ['Hello', 'World'],
                 'json-false-array': ['should', 'not', 'be', 'in', 'json'],
+                'json-false-collection': [
+                    { id: 1, value: 'bar' },
+                    { id: 2, value: 'baz' },
+                    { id: 3, value: 'qux' }
+                ],
 
                 'not-schemed-property': 'not in schema'
             });
@@ -193,7 +199,8 @@
 
                     'json-getter-array',
                     'json-function-array',
-                    'json-false-array'
+                    'json-false-array',
+                    'json-false-collection'
                 ]);
             });
 
