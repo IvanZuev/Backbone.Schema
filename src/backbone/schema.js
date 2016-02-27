@@ -2,7 +2,7 @@
     'use strict';
 
     if (typeof module === 'object' && typeof exports === 'object') {
-        exports.Schema = factory(require('underscore'), require('backbone'), require('globalize'));
+        module.exports = factory(require('underscore'), require('backbone'), require('globalize'));
     }
     else if (typeof define === 'function' && define.amd) {
         define(['underscore', 'backbone', 'globalize'], factory);
@@ -39,14 +39,14 @@
                 _.each(attributes, function (value, attribute, attributes) {
 
                     ////////////////////
-                    
+
                     if(model.schema.attributes[attribute]){
 
                         toJSON = model.schema.attributes[attribute].toJSON;
                         toJSON = _.isUndefined(toJSON) ? true : toJSON;
 
                         if (toJSON === false){
-                            delete attributes[attribute];   
+                            delete attributes[attribute];
                             return;
                         } else if (_.isFunction(toJSON)){
                             value = toJSON(attribute, value, options);
@@ -447,7 +447,7 @@
                 getter: this._transformGetterToHandleArrays(getter, type, isArray, options),
                 setter: this._transformSetterToHandleArrays(setter, type, isArray, options),
             });
-                        
+
 
             if(!_.isUndefined(toJSON)){
                 if(_.isFunction(toJSON)){
