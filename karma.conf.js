@@ -34,7 +34,7 @@ module.exports = function (config) {
 
         reportSlowerThan: 75,
 
-        browsers: ['Firefox', 'PhantomJS'],
+        browsers: ['Firefox', 'Chrome'],
 
         autoWatch: true
     });
