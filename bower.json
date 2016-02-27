@@ -29,11 +29,9 @@
     "karma.conf.js",
     "package.json"
   ],
-  "dependencies": {
-    "backbone": "1.0.0 - 1.1.2",
-    "underscore": "1.4.4 - 1.6.0"
-  },
   "devDependencies": {
+    "backbone": "~1.2.0",
+    "underscore": "~1.8.0",
     "chai": "~3.2.0",
     "mocha": "~2.0.0",
     "globalize": "~0.1.0",
