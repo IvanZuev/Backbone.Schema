@@ -35,7 +35,7 @@
 
         this.model = model;
         this.attributes = {};
-        model.schema = this;
+        model._attributesSchema = this;
 
         ////////////////////
 
@@ -47,9 +47,9 @@
 
                     ////////////////////
                     
-                    if(model.schema.attributes[attribute]){
+                    if(model._attributesSchema.attributes[attribute]){
 
-                        toJSON = model.schema.attributes[attribute].toJSON;
+                        toJSON = model._attributesSchema.attributes[attribute].toJSON;
                         toJSON = _.isUndefined(toJSON) ? true : toJSON;
 
                         if (toJSON === false){
@@ -72,7 +72,7 @@
 
                 ////////////////////
 
-                var options = this.schema.attributes[attribute],
+                var options = this._attributesSchema.attributes[attribute],
                     getter = options && options.getter;
 
                 ////////////////////
@@ -105,7 +105,7 @@
 
                     ////////////////////
 
-                    var options = this.schema.attributes[attribute],
+                    var options = this._attributesSchema.attributes[attribute],
                         setter = options && options.setter;
 
                     ////////////////////
